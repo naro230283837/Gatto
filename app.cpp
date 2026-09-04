@@ -1,39 +1,98 @@
 #include <iostream>
 using namespace std;
 
-class Animal {
+class StackLinked
+{
+private:
+    struct Node
+    {
+        int item;
+        Node* next;
+    };
+
+    Node* top;
+
 public:
-            virtual void makeSound() {
-                        cout << "Animal makes a sound" << endl;
+    StackLinked()
+    {
+        top = NULL;
+    }
+
+    void push(int value)
+    {
+        Node* newNode = new Node;
+        newNode->item = value;
+        newNode->next = top;
+        top = newNode;
+    }
+
+    void pop()
+    {
+        if (isEmpty())
+        {
+            cout << "Stack is empty" << endl;
+            return;
+        }
+
+        Node* x = top;
+        top = top->next;
+        delete x;
+    }
+
+    void print()
+    {
+        Node* x = top;
+        while (x != NULL)
+        {
+            cout << x->item << endl;
+            x = x->next;
+        }
+    }
+
+    int getTop()
+    {
+        return top->item;
+    }
+
+    bool isEmpty()
+    {
+        return top == NULL;
+    }
+
+    void search(int value)
+    {
+        Node* x = top;
+
+        while (x != NULL)
+        {
+            if (x->item == value)
+            {
+                cout << value << " is found" << endl;
+                return;
             }
 
-            virtual ~Animal() {}
+            x = x->next;
+        }
+
+        cout << value << " is not found" << endl;
+    }
 };
 
-class Dog : public Animal {
-public:
-            void makeSound() override {
-                        cout << "Dog says: Woof!" << endl;
-            }
-};
+int main()
+{
+    StackLinked stack;
 
-class Cat : public Animal {
-public:
-            void makeSound() override {
-                        cout << "Cat says: Meow!" << endl;
-            }
-};
+    stack.push(10);
+    stack.push(20);
+    stack.push(30);
+    stack.push(40);
+    stack.push(50);
 
-int main() {
-            Dog dog;
-            Cat cat;
-            Animal* animalPointer;
+    int value;
+    cout << "Enter a number to search: ";
+    cin >> value;
 
-            animalPointer = &dog;
-            animalPointer->makeSound();
+    stack.search(value);
 
-            animalPointer = &cat;
-            animalPointer->makeSound();
-
-            return 0;
+    return 0;
 }
