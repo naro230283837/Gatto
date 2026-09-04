@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-class StackLinked
+class QueueLinked
 {
 private:
     struct Node
@@ -10,38 +10,56 @@ private:
         Node* next;
     };
 
-    Node* top;
+    Node* front;
+    Node* rear;
 
 public:
-    StackLinked()
+    QueueLinked()
     {
-        top = NULL;
+        front = NULL;
+        rear = NULL;
     }
 
-    void push(int value)
+    void enqueue(int value)
     {
         Node* newNode = new Node;
         newNode->item = value;
-        newNode->next = top;
-        top = newNode;
+        newNode->next = NULL;
+
+        if (isEmpty())
+        {
+            front = newNode;
+            rear = newNode;
+        }
+        else
+        {
+            rear->next = newNode;
+            rear = newNode;
+        }
     }
 
-    void pop()
+    void dequeue()
     {
         if (isEmpty())
         {
-            cout << "Stack is empty" << endl;
+            cout << "Queue is empty" << endl;
             return;
         }
 
-        Node* x = top;
-        top = top->next;
+        Node* x = front;
+        front = front->next;
+
+        if (front == NULL)
+        {
+            rear = NULL;
+        }
+
         delete x;
     }
 
     void print()
     {
-        Node* x = top;
+        Node* x = front;
         while (x != NULL)
         {
             cout << x->item << endl;
@@ -49,50 +67,36 @@ public:
         }
     }
 
-    int getTop()
+    int getFront()
     {
-        return top->item;
+        return front->item;
     }
 
     bool isEmpty()
     {
-        return top == NULL;
-    }
-
-    void search(int value)
-    {
-        Node* x = top;
-
-        while (x != NULL)
-        {
-            if (x->item == value)
-            {
-                cout << value << " is found" << endl;
-                return;
-            }
-
-            x = x->next;
-        }
-
-        cout << value << " is not found" << endl;
+        return front == NULL;
     }
 };
 
 int main()
 {
-    StackLinked stack;
+    QueueLinked queue;
 
-    stack.push(10);
-    stack.push(20);
-    stack.push(30);
-    stack.push(40);
-    stack.push(50);
+    queue.enqueue(10);
+    queue.enqueue(20);
+    queue.enqueue(30);
+    queue.enqueue(40);
+    queue.enqueue(50);
 
-    int value;
-    cout << "Enter a number to search: ";
-    cin >> value;
+    cout << "Queue before dequeue:" << endl;
+    queue.print();
 
-    stack.search(value);
+    queue.dequeue();
+
+    cout << "Queue after dequeue:" << endl;
+    queue.print();
 
     return 0;
 }
+
+
